@@ -1,109 +1,109 @@
 version: '3'
 services:
-  # mongodb:
-  #   build:
-  #     context: mongo
-  #   image: ${REPO}/robot-shop-rs-mongodb:${MONGODB_TAG}
-  #   networks:
-  #     - robot-shop
-  #   logging: &logging
-  #     driver: "json-file"
-  #     options:
-  #       max-size: "25m"
-  #       max-file: "2"
-  # redis:
-  #   image: redis:6.2-alpine
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
-  # rabbitmq:
-  #   image: rabbitmq:3.8-management-alpine
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
-  # catalogue:
-  #   build:
-  #     context: catalogue
-  #   image: ${REPO}/robot-shop-rs-catalogue:${CATALOGUE_TAG}
-  #   depends_on:
-  #     - mongodb
-  #   networks:
-  #     - robot-shop
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 3
-  #   logging:
-  #     <<: *logging
-  # user:
-  #   build:
-  #     context: user
-  #   image: ${REPO}/robot-shop-rs-user:${USER_TAG}
-  #   depends_on:
-  #     - mongodb
-  #     - redis
-  #   networks:
-  #     - robot-shop
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 3
-  #   logging:
-  #     <<: *logging
-  # cart:
-  #   build:
-  #     context: cart
-  #   image: ${REPO}/robot-shop-rs-cart:${CART_TAG}
-  #   depends_on:
-  #     - redis
-  #     - catalogue
-  #   networks:
-  #     - robot-shop
-  #   environment:
-  #     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otelcollector:4317
-  #     OTEL_RESOURCE_ATTRIBUTES: "service.name=cart,service.namespace=robot-shop"
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 3
-  #   logging:
-  #     <<: *logging
-  # mysql:
-  #   image: mysql:5.7
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=superdba
-  #     - MYSQL_DATABASE=cities
-  #     - MYSQL_USER=shipping
-  #     - MYSQL_PASSWORD=secret
-  #   cap_add:
-  #     - NET_ADMIN
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
-  # loader:
-  #   build:
-  #     context: mysql-loader
-  #   image: ${REPO}/robot-shop-rs-loader:${LOADER_TAG}
-  #   environment:
-  #     - MYSQL_ROOT_PASSWORD=superdba
-  #   depends_on:
-  #     - mysql
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
+  mongodb:
+    build:
+      context: mongo
+    image: ${REPO}/robot-shop-rs-mongodb:${MONGODB_TAG}
+    networks:
+      - robot-shop
+    logging: &logging
+      driver: "json-file"
+      options:
+        max-size: "25m"
+        max-file: "2"
+  redis:
+    image: redis:6.2-alpine
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
+  catalogue:
+    build:
+      context: catalogue
+    image: ${REPO}/robot-shop-rs-catalogue:${CATALOGUE_TAG}
+    depends_on:
+      - mongodb
+    networks:
+      - robot-shop
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    logging:
+      <<: *logging
+  user:
+    build:
+      context: user
+    image: ${REPO}/robot-shop-rs-user:${USER_TAG}
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - robot-shop
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    logging:
+      <<: *logging
+  cart:
+    build:
+      context: cart
+    image: ${REPO}/robot-shop-rs-cart:${CART_TAG}
+    depends_on:
+      - redis
+      - catalogue
+    networks:
+      - robot-shop
+    environment:
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otelcollector:4317
+      OTEL_RESOURCE_ATTRIBUTES: "service.name=cart,service.namespace=robot-shop"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/health" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    logging:
+      <<: *logging
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_ROOT_PASSWORD=superdba
+      - MYSQL_DATABASE=cities
+      - MYSQL_USER=shipping
+      - MYSQL_PASSWORD=secret
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
+  loader:
+    build:
+      context: mysql-loader
+    image: ${REPO}/robot-shop-rs-loader:${LOADER_TAG}
+    environment:
+      - MYSQL_ROOT_PASSWORD=superdba
+    depends_on:
+      - mysql
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
   shipping:
     build:
       context: shipping
     image: ${REPO}/robot-shop-rs-shipping:${SHIPPING_TAG}
-    # depends_on:
-    #   - mysql
+    depends_on:
+      - mysql
     networks:
       - robot-shop
     healthcheck:
@@ -114,104 +114,101 @@ services:
     environment:
       OTEL_RESOURCE_ATTRIBUTES: "service.name=shipping,service.namespace=robot-shop"
     logging:
-      driver: "json-file"
-      options:
-        max-size: "25m"
-        max-file: "2"
-  # ratings:
-  #   build:
-  #     context: ratings
-  #   image: ${REPO}/robot-shop-rs-ratings:${RATINGS_TAG}
-  #   depends_on:
-  #     - mysql
-  #     - catalogue
-  #   environment:
-  #     APP_ENV: prod
-  #   networks:
-  #     - robot-shop
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 3
-  #   logging:
-  #     <<: *logging
-  # payment:
-  #   build:
-  #     context: payment
-  #   image: ${REPO}/robot-shop-rs-payment:${PAYMENT_TAG}
-  #   depends_on:
-  #     - rabbitmq
-  #   networks:
-  #     - robot-shop
-  #   healthcheck:
-  #     test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 3
-  #   # Uncomment to change payment gateway
-  #   environment:
-  #     OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otelcollector:4317
-  #     OTEL_RESOURCE_ATTRIBUTES: "service.name=payment,service.namespace=robot-shop"
-  #     #PAYMENT_GATEWAY: "https://www.worldpay.com"
-  #   logging:
-  #     <<: *logging
-  # dispatch:
-  #   build:
-  #     context: dispatch
-  #     args:
-  #       VERSION: $DISPATCH_TAG
-  #   image: ${REPO}/robot-shop-rs-dispatch:${DISPATCH_TAG}
-  #   environment:
-  #     DISPATCH_ERROR_PERCENT: "0"
-  #   depends_on:
-  #     - rabbitmq
-  #     - mongodb
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
-  # reports:
-  #   build:
-  #     context: reports
-  #     args:
-  #       VERSION: $REPORTS_TAG
-  #   image: ${REPO}/robot-shop-rs-reports:${REPORTS_TAG}
-  #   environment:
-  #     REPORTS_ERROR_PERCENT: "0"
-  #   depends_on:
-  #     - mongodb
-  #     - redis
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
-  # pushgateway:
-  #   image: prom/pushgateway:v1.5.1
-  #   networks:
-  #     - robot-shop
-  #   logging:
-  #     <<: *logging
-  # web:
-  #   build:
-  #     context: web
-  #   image: ${REPO}/robot-shop-rs-web:${WEB_TAG}
-  #   depends_on:
-  #     - catalogue
-  #     - user
-  #     - shipping
-  #     - payment
-  #   ports:
-  #     - "8080:8080"
-  #   networks:
-  #     - robot-shop
-  #   healthcheck:
-  #     test: [ "CMD", "curl", "-f", "http://localhost:8080/" ]
-  #     interval: 10s
-  #     timeout: 10s
-  #     retries: 3
-  #   logging:
-  #     <<: *logging
+      <<: *logging
+  ratings:
+    build:
+      context: ratings
+    image: ${REPO}/robot-shop-rs-ratings:${RATINGS_TAG}
+    depends_on:
+      - mysql
+      - catalogue
+    environment:
+      APP_ENV: prod
+    networks:
+      - robot-shop
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    logging:
+      <<: *logging
+  payment:
+    build:
+      context: payment
+    image: ${REPO}/robot-shop-rs-payment:${PAYMENT_TAG}
+    depends_on:
+      - rabbitmq
+    networks:
+      - robot-shop
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    # Uncomment to change payment gateway
+    environment:
+      OTEL_EXPORTER_OTLP_TRACES_ENDPOINT: http://otelcollector:4317
+      OTEL_RESOURCE_ATTRIBUTES: "service.name=payment,service.namespace=robot-shop"
+      #PAYMENT_GATEWAY: "https://www.worldpay.com"
+    logging:
+      <<: *logging
+  dispatch:
+    build:
+      context: dispatch
+      args:
+        VERSION: $DISPATCH_TAG
+    image: ${REPO}/robot-shop-rs-dispatch:${DISPATCH_TAG}
+    environment:
+      DISPATCH_ERROR_PERCENT: "0"
+    depends_on:
+      - rabbitmq
+      - mongodb
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
+  reports:
+    build:
+      context: reports
+      args:
+        VERSION: $REPORTS_TAG
+    image: ${REPO}/robot-shop-rs-reports:${REPORTS_TAG}
+    environment:
+      REPORTS_ERROR_PERCENT: "0"
+    depends_on:
+      - mongodb
+      - redis
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
+  pushgateway:
+    image: prom/pushgateway:v1.5.1
+    networks:
+      - robot-shop
+    logging:
+      <<: *logging
+  web:
+    build:
+      context: web
+    image: ${REPO}/robot-shop-rs-web:${WEB_TAG}
+    depends_on:
+      - catalogue
+      - user
+      - shipping
+      - payment
+    ports:
+      - "8080:8080"
+    networks:
+      - robot-shop
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/" ]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+    logging:
+      <<: *logging
 
 networks:
   robot-shop:
