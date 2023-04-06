@@ -1,19 +1,19 @@
 # Registry and rpository for Docker images
 # Default is docker/robotshop/image:latest
 image:
-  repo: asserts
-  cartVersion: "1.0.11"
-  catalogueVersion: "1.0.2"
-  dispatchVersion: "1.0.3"
-  mongodbVersion: "1.0.1"
-  loaderVersion: "1.0.1"
-  paymentVersion: "1.0.13"
-  reportsVersion: "1.0.1"
-  ratingsVersion: "1.0.1"
-  shippingVersion: "1.0.16"
-  userVersion: "1.0.3"
-  webVersion: "1.0.2"
-  otelcollectorVersion: "v0.0.71"
+  repo: gcr.io/solo-test-236622
+  cartVersion: "1.0.11-solo"
+  catalogueVersion: "1.0.2-solo"
+  dispatchVersion: "1.0.3-solo"
+  mongodbVersion: "1.0.1-solo"
+  loaderVersion: "1.0.1-solo"
+  paymentVersion: "1.0.13-solo"
+  reportsVersion: "1.0.1-solo"
+  ratingsVersion: "1.0.1-solo"
+  shippingVersion: "1.0.16-solo"
+  userVersion: "1.0.3-solo"
+  webVersion: "1.0.2-solo"
+  otelcollectorVersion: "v0.0.71-solo"
   pullPolicy: IfNotPresent
 
 # Payment gateway URL
